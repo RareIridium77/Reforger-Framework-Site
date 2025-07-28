@@ -236,12 +236,36 @@
 
         function getKeywordInfo(msg) {
             const lowered = msg.toLowerCase();
-            for (let key in keywords) {
-                if (lowered.startsWith(key + ":") || lowered.startsWith(key + " ")) {
-                    return keywords[key];
+            const firstLine = lowered.split("\n")[0];
+
+            // for "Merge"
+            if (firstLine.startsWith("merge")) {
+                return [{ label: "Merge", color: keywords.merge.color }];
+            }
+
+            const keywordPart = firstLine.split(":")[0].trim();
+            const keys = keywordPart.split("+").map(k => k.trim());
+            const found = [];
+
+            for (let key of keys) {
+                if (keywords[key]) {
+                    found.push({ label: keywords[key].label, color: keywords[key].color });
                 }
             }
-            return { label: "Commit", color: "#999" };
+
+            return found.length === 0
+                ? [{ label: "Commit", color: "#999" }]
+                : found;
+        }
+
+        function cleanMessage(raw) {
+            const firstLine = raw.split("\n").find(line => line.trim()) || "No message";
+            
+            if (/^[a-z+]+:/i.test(firstLine)) {
+                return firstLine.replace(/^[^:]+:\s*/i, "");
+            }
+
+            return firstLine;
         }
 
         fetch("https://api.github.com/repos/RareIridium77/Reforger-Base/commits")
@@ -255,13 +279,18 @@
                     const author = commit.commit.author.name;
                     const date = new Date(commit.commit.author.date).toLocaleDateString();
                     const info = getKeywordInfo(msg);
-
-                    const cleanedMsg = msg.replace(/^[a-z]+:\s*/i, "");
+                    
+                    const cleanedMsg = cleanMessage(msg);
 
                     const item = document.createElement("li");
                     item.style.marginBottom = "14px";
+
+                    const labelsHTML = info.map(i =>
+                        `<strong style="color: ${i.color}; margin-right: 6px;">${i.label}</strong>`
+                    ).join("");
+
                     item.innerHTML = `
-                        <strong style="color: ${info.color};">${info.label}</strong> – ${cleanedMsg}<br>
+                        ${labelsHTML} – ${cleanedMsg}<br>
                         <small style="color: #aaa;">
                             ${author} • ${date} • 
                             <a href="https://github.com/RareIridium77/Reforger-Base/commit/${fullSha}" 
