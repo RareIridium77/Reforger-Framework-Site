@@ -116,6 +116,10 @@
         }
 
         @media (max-width: 600px) {
+            .hidephone {
+                display: none !important;
+            }
+
             h1 {
                 font-size: 2em;
             }
@@ -126,14 +130,18 @@
             }
 
             .button {
-                width: 100%;
+                width: 50%;
+
                 min-width: unset;
                 font-size: 1em;
             }
 
             .button-group {
+                width: 100%;
+                margin: 0 auto;
                 flex-direction: column;
                 gap: 10px;
+                align-items: center;
             }
         }
 
@@ -186,8 +194,8 @@
     <div class="button-group">
         <a class="button" href="https://discord.gg/PUEQ75xMd2" target="_blank"><span class="ico"><img
                     src="./src/discord.png" alt=""></span> Join Discord</a>
-        <a class="button" href="steam://connect/147.185.221.16:52346"><span class="ico"><img src="./src/steam.png"
-                    alt=""></span> Join GMod Server</a>
+        <a class="button hidephone" href="steam://connect/147.185.221.16:52346"><span class="ico"><img
+                    src="./src/steam.png" alt=""></span> Join GMod Server</a>
     </div>
     <footer>
         <a href="https://www.flaticon.com/free-icons/discord" title="discord icons">Discord icons created by Freepik -
