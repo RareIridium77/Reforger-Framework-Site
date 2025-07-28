@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Reforger Framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at center, #1a1a1a, #0e0e0e);
+            color: #ffffff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            overflow-x: hidden;
+
+            --button-primary: #a33333;
+            --button-primary-hovered: #1b1a57;
+        }
+
+        h1,
+        .subtitle,
+        .description,
+        .button-group {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            animation-delay: 0.2s;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #ccc;
+            margin-bottom: 40px;
+            animation-delay: 0.4s;
+        }
+
+        .description {
+            max-width: 800px;
+            font-size: 1.05em;
+            line-height: 1.6;
+            background-color: rgba(31, 31, 31, 0.226);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            text-align: left;
+            animation-delay: 0.6s;
+            color: #dddddd;
+        }
+
+        .description a {
+            color: #4ea0ff;
+            text-decoration: none;
+        }
+
+        .description a:hover {
+            text-decoration: underline;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation-delay: 0.8s;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--button-primary);
+            color: white;
+            font-size: 1.1em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            min-width: 220px;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: var(--button-primary-hovered);
+            transform: scale(1.05);
+        }
+
+        .button .ico img {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .description {
+                font-size: 1em;
+                text-align: left;
+            }
+
+            .button {
+                width: 100%;
+                min-width: unset;
+                font-size: 1em;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        footer {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 80px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 1s;
+        }
+
+        footer a {
+            color: #777;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            color: #aaa;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Reforger Framework</h1>
+    <div class="subtitle">One Base. All Vehicles. By RareIridium77.</div>
+
+    <div class="description">
+        <p>
+            <strong>Reforger Framework</strong> is a powerful shared system for Garry's Mod addons under the
+            <code>[Reforger]</code> tag. It aims to unify damage logic, armor behavior, and advanced systems across
+            various vehicle frameworks.
+        </p>
+        <p>Currently supported and integrated systems include:</p>
+        <ul>
+            <li><a href="https://github.com/SpaxscE/lvs_base" target="_blank">Luna's Vehicle Base [LVS]</a></li>
+            <li><a href="https://github.com/SpaxscE/simfphys_base" target="_blank">Simfphys</a></li>
+            <li><a href="https://github.com/StyledStrike/gmod-glide" target="_blank">GMod Glide</a></li>
+        </ul>
+        <p>
+            The framework provides modular tools for damage propagation, ammo systems, and advanced effects (<a
+                href="https://github.com/RareIridium77/Reforger-Enhanced-Effects" target="_blank">RLFX [WIP BETA]</a>),
+            optimized for both realism and performance.
+        </p>
+    </div>
+
+    <div class="button-group">
+        <a class="button" href="https://discord.gg/PUEQ75xMd2" target="_blank"><span class="ico"><img
+                    src="./src/discord.png" alt=""></span> Join Discord</a>
+        <a class="button" href="steam://connect/147.185.221.16:52346"><span class="ico"><img src="./src/steam.png"
+                    alt=""></span> Join GMod Server</a>
+    </div>
+    <footer>
+        <a href="https://www.flaticon.com/free-icons/discord" title="discord icons">Discord icons created by Freepik -
+            Flaticon</a>
+        <a href="https://www.flaticon.com/free-icons/steam" title="steam icons">Steam icons created by pocike -
+            Flaticon</a>
+
+        <p>Made with ❤️ by RareIridium77. <span id="year"></span></p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const year = new Date().getFullYear();
+            document.getElementById("year").textContent = year;
+        });
+    </script>
+</body>
+
+</html>
