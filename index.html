@@ -20,6 +20,13 @@
 
             --button-primary: #a33333;
             --button-primary-hovered: #1b1a57;
+
+            --fix-color: #d829cf;
+            --upd-color: #46cc1e;
+            --imp-color: #dbac13;
+            --add-color: #1783b4;
+            --ref-color: #19c096;
+            --mrg-color: #99f066;
         }
 
         h1,
@@ -40,17 +47,19 @@
         .subtitle {
             font-size: 1.2em;
             color: #ccc;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             animation-delay: 0.4s;
         }
 
         .description {
             max-width: 800px;
+            width: 80%;
             font-size: 1.05em;
             line-height: 1.6;
             background-color: rgba(31, 31, 31, 0.226);
             padding: 25px;
             border-radius: 15px;
+            margin-top: 40px;
             margin-bottom: 40px;
             text-align: left;
             animation-delay: 0.6s;
@@ -165,6 +174,10 @@
             color: #aaa;
             text-decoration: underline;
         }
+
+        #comit-list {
+            list-style: none; padding: 0; max-width: 800px; margin: auto; text-align: left;
+        }
     </style>
 </head>
 
@@ -197,6 +210,12 @@
         <a class="button hidephone" href="steam://connect/147.185.221.16:52346"><span class="ico"><img
                     src="./src/steam.png" alt=""></span> Join GMod Server</a>
     </div>
+
+    <div id="commits" class="description">
+        <h2>Latest Commits</h2>
+        <ul id="commit-list"></ul>
+    </div>
+
     <footer>
         <a href="https://www.flaticon.com/free-icons/discord" title="discord icons">Discord icons created by Freepik -
             Flaticon</a>
@@ -205,7 +224,59 @@
 
         <p>Made with ❤️ by RareIridium77. <span id="year"></span></p>
     </footer>
+    <script>
+        const keywords = {
+            fix: { label: "Fix", color: "var(--fix-color)" },
+            upd: { label: "Update", color: "var(--upd-color)" },
+            imp: { label: "Improve", color: "var(--imp-color)" },
+            add: { label: "Add", color: "var(--add-color)" },
+            ref: { label: "Refactor", color: "var(--ref-color)" },
+            merge: { label: "Merge", color: "var(--mrg-color)" }
+        };
 
+        function getKeywordInfo(msg) {
+            const lowered = msg.toLowerCase();
+            for (let key in keywords) {
+                if (lowered.startsWith(key + ":") || lowered.startsWith(key + " ")) {
+                    return keywords[key];
+                }
+            }
+            return { label: "Commit", color: "#999" };
+        }
+
+        fetch("https://api.github.com/repos/RareIridium77/Reforger-Base/commits")
+            .then(res => res.json())
+            .then(commits => {
+                const list = document.getElementById("commit-list");
+                commits.slice(0, 5).forEach(commit => {
+                    const msg = commit.commit.message;
+                    const sha = commit.sha.substring(0, 7);
+                    const fullSha = commit.sha;
+                    const author = commit.commit.author.name;
+                    const date = new Date(commit.commit.author.date).toLocaleDateString();
+                    const info = getKeywordInfo(msg);
+
+                    const cleanedMsg = msg.replace(/^[a-z]+:\s*/i, "");
+
+                    const item = document.createElement("li");
+                    item.style.marginBottom = "14px";
+                    item.innerHTML = `
+                        <strong style="color: ${info.color};">${info.label}</strong> – ${cleanedMsg}<br>
+                        <small style="color: #aaa;">
+                            ${author} • ${date} • 
+                            <a href="https://github.com/RareIridium77/Reforger-Base/commit/${fullSha}" 
+                            target="_blank" style="color: #888;"><code>${sha}</code></a>
+                        </small>
+                    `;
+                    list.appendChild(item);
+                });
+            })
+            .catch(err => {
+                document.getElementById("commit-list").innerHTML =
+                    `<li style="color: #f88;">Failed to load commits 😓</li>`;
+                console.error("GitHub API error:", err);
+            });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const year = new Date().getFullYear();
