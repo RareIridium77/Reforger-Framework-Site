@@ -1,0 +1,212 @@
+ body {
+     margin: 0;
+     font-family: 'Segoe UI', sans-serif;
+     background: radial-gradient(circle at center, #1a1a1a, #0e0e0e);
+     color: #ffffff;
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     padding: 50px 20px;
+     overflow-x: hidden;
+
+     --button-primary: #a33333;
+     --button-primary-hovered: #1b1a57;
+
+     --fix-color: #d829cf;
+     --upd-color: #46cc1e;
+     --imp-color: #dbac13;
+     --add-color: #1783b4;
+     --ref-color: #19c096;
+     --mrg-color: #99f066;
+     --chg-color: #e77b33;
+ }
+
+ h1,
+ .subtitle,
+ .description,
+ .button-group {
+     opacity: 0;
+     transform: translateY(30px);
+     animation: fadeInUp 1s ease forwards;
+ }
+
+ h1 {
+     font-size: 3em;
+     margin-bottom: 10px;
+     animation-delay: 0.2s;
+ }
+
+ .subtitle {
+     font-size: 1.2em;
+     color: #ccc;
+     margin-bottom: 20px;
+     animation-delay: 0.4s;
+ }
+
+ .description {
+     max-width: 800px;
+     width: 80%;
+     font-size: 1.05em;
+     line-height: 1.6;
+     background-color: rgba(31, 31, 31, 0.226);
+     padding: 25px;
+     border-radius: 15px;
+     margin-top: 40px;
+     margin-bottom: 40px;
+     text-align: left;
+     animation-delay: 0.6s;
+     color: #dddddd;
+ }
+
+ .description a {
+     color: #4ea0ff;
+     text-decoration: none;
+ }
+
+ .description a:hover {
+     text-decoration: underline;
+ }
+
+ .button-group {
+     display: flex;
+     gap: 20px;
+     flex-wrap: wrap;
+     justify-content: center;
+     animation-delay: 0.8s;
+ }
+
+ .button {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 10px;
+     background-color: var(--button-primary);
+     color: white;
+     font-size: 1.1em;
+     padding: 15px 30px;
+     border: none;
+     border-radius: 12px;
+     text-decoration: none;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+     transition: all 0.3s ease;
+     min-width: 220px;
+     text-align: center;
+     cursor: pointer;
+ }
+
+ .button:hover {
+     background-color: var(--button-primary-hovered);
+     transform: scale(1.05);
+ }
+
+ .button .ico img {
+     width: 24px;
+     height: 24px;
+     display: block;
+ }
+
+ @keyframes fadeInUp {
+     from {
+         opacity: 0;
+         transform: translateY(30px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @media (max-width: 600px) {
+     .hidephone {
+         display: none !important;
+     }
+
+     h1 {
+         font-size: 2em;
+     }
+
+     .description {
+         font-size: 1em;
+         text-align: left;
+     }
+
+     .button {
+         width: 50%;
+
+         min-width: unset;
+         font-size: 1em;
+     }
+
+     .button-group {
+         width: 100%;
+         margin: 0 auto;
+         flex-direction: column;
+         gap: 10px;
+         align-items: center;
+     }
+ }
+
+ footer {
+     font-size: 0.8em;
+     color: #999;
+     margin-top: 80px;
+     text-align: center;
+     opacity: 0;
+     animation: fadeInUp 1s ease forwards;
+     animation-delay: 1s;
+ }
+
+ footer a {
+     color: #777;
+     text-decoration: none;
+     margin: 0 10px;
+ }
+
+ footer a:hover {
+     color: #aaa;
+     text-decoration: underline;
+ }
+
+ #comit-list {
+     list-style: none;
+     padding: 0;
+     max-width: 800px;
+     margin: auto;
+     text-align: left;
+ }
+
+ #commit-list li {
+     word-wrap: break-word;
+     overflow-wrap: break-word;
+     max-width: 100%;
+ }
+
+ select {
+     background-color: #1b1b1b;
+     color: #fff;
+     border: 1px solid #333;
+     border-radius: 8px;
+     padding: 10px 15px;
+     font-size: 16px;
+     appearance: none;
+     /* убирает стрелочку на некоторых браузерах */
+     -webkit-appearance: none;
+     -moz-appearance: none;
+ }
+
+ .select-wrapper {
+     position: relative;
+     display: inline-block;
+ }
+
+ .select-wrapper::after {
+     content: "+";
+     position: absolute;
+     top: 50%;
+     right: 15px;
+     transform: translateY(-50%);
+     color: #888;
+     pointer-events: none;
+ }

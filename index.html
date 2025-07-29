@@ -5,191 +5,7 @@
     <meta charset="UTF-8" />
     <title>Reforger Framework</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.3" />
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: radial-gradient(circle at center, #1a1a1a, #0e0e0e);
-            color: #ffffff;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 50px 20px;
-            overflow-x: hidden;
-
-            --button-primary: #a33333;
-            --button-primary-hovered: #1b1a57;
-
-            --fix-color: #d829cf;
-            --upd-color: #46cc1e;
-            --imp-color: #dbac13;
-            --add-color: #1783b4;
-            --ref-color: #19c096;
-            --mrg-color: #99f066;
-        }
-
-        h1,
-        .subtitle,
-        .description,
-        .button-group {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s ease forwards;
-        }
-
-        h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            animation-delay: 0.2s;
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            color: #ccc;
-            margin-bottom: 20px;
-            animation-delay: 0.4s;
-        }
-
-        .description {
-            max-width: 800px;
-            width: 80%;
-            font-size: 1.05em;
-            line-height: 1.6;
-            background-color: rgba(31, 31, 31, 0.226);
-            padding: 25px;
-            border-radius: 15px;
-            margin-top: 40px;
-            margin-bottom: 40px;
-            text-align: left;
-            animation-delay: 0.6s;
-            color: #dddddd;
-        }
-
-        .description a {
-            color: #4ea0ff;
-            text-decoration: none;
-        }
-
-        .description a:hover {
-            text-decoration: underline;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation-delay: 0.8s;
-        }
-
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background-color: var(--button-primary);
-            color: white;
-            font-size: 1.1em;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 12px;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            min-width: 220px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .button:hover {
-            background-color: var(--button-primary-hovered);
-            transform: scale(1.05);
-        }
-
-        .button .ico img {
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .hidephone {
-                display: none !important;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-
-            .description {
-                font-size: 1em;
-                text-align: left;
-            }
-
-            .button {
-                width: 50%;
-
-                min-width: unset;
-                font-size: 1em;
-            }
-
-            .button-group {
-                width: 100%;
-                margin: 0 auto;
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
-            }
-        }
-
-        footer {
-            font-size: 0.8em;
-            color: #999;
-            margin-top: 80px;
-            text-align: center;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-            animation-delay: 1s;
-        }
-
-        footer a {
-            color: #777;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        footer a:hover {
-            color: #aaa;
-            text-decoration: underline;
-        }
-
-        #comit-list {
-            list-style: none;
-            padding: 0;
-            max-width: 800px;
-            margin: auto;
-            text-align: left;
-        }
-
-        #commit-list li {
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="./src/style.css">
 </head>
 
 <body>
@@ -231,6 +47,13 @@
     </div>
 
     <div id="commits" class="description">
+        <h2>Select Repository</h2>
+        <div class="select-wrapper">
+            <select id="repo-select">
+                <option disabled selected>Loading...</option>
+            </select>
+        </div>
+
         <h2>Latest Commits</h2>
         <ul id="commit-list"></ul>
     </div>
@@ -266,88 +89,186 @@
     </script>
 
     <script>
+        const GITHUB_USER = "RareIridium77";
+        const CACHE_TTL = 10 * 60 * 1000; // 10 minutes for cache
+
         const keywords = {
-            fix: { label: "Fix", color: "var(--fix-color)" },
-            upd: { label: "Update", color: "var(--upd-color)" },
-            imp: { label: "Improve", color: "var(--imp-color)" },
-            add: { label: "Add", color: "var(--add-color)" },
-            ref: { label: "Refactor", color: "var(--ref-color)" },
-            merge: { label: "Merge", color: "var(--mrg-color)" }
+            fix: { label: "Fixed", color: "var(--fix-color)" },
+            fixed: { label: "Fixed", color: "var(--fix-color)" },
+            upd: { label: "Updated", color: "var(--upd-color)" },
+            update: { label: "Updated", color: "var(--upd-color)" },
+            updated: { label: "Updated", color: "var(--upd-color)" },
+            imp: { label: "Improved", color: "var(--imp-color)" },
+            improve: { label: "Improved", color: "var(--imp-color)" },
+            improved: { label: "Improved", color: "var(--imp-color)" },
+            add: { label: "Added", color: "var(--add-color)" },
+            added: { label: "Added", color: "var(--add-color)" },
+            ref: { label: "Refactored", color: "var(--ref-color)" },
+            merge: { label: "Merged", color: "var(--mrg-color)" },
+            changed: { label: "Changed", color: "var(--chg-color)" },
+            changes: { label: "Changes", color: "var(--chg-color)" },
         };
 
         function getKeywordInfo(msg) {
             const lowered = msg.toLowerCase();
             const firstLine = lowered.split("\n")[0];
-
-            // for "Merge"
-            if (firstLine.startsWith("merge")) {
-                return [{ label: "Merge", color: keywords.merge.color }];
-            }
-
-            const keywordPart = firstLine.split(":")[0].trim();
-            const keys = keywordPart.split("+").map(k => k.trim());
             const found = [];
 
-            for (let key of keys) {
-                if (keywords[key]) {
-                    found.push({ label: keywords[key].label, color: keywords[key].color });
+            for (const key in keywords) {
+                if (firstLine.includes(key)) {
+                    found.push({
+                        label: keywords[key].label,
+                        color: keywords[key].color
+                    });
                 }
             }
 
-            return found.length === 0
+            const unique = new Map();
+            for (const i of found) {
+                unique.set(i.label, i);
+            }
+
+            return unique.size === 0
                 ? [{ label: "Commit", color: "#999" }]
-                : found;
+                : Array.from(unique.values());
         }
 
         function cleanMessage(raw) {
             const firstLine = raw.split("\n").find(line => line.trim()) || "No message";
-
             if (/^[a-z+]+:/i.test(firstLine)) {
                 return firstLine.replace(/^[^:]+:\s*/i, "");
             }
-
             return firstLine;
         }
 
-        const url = "https://api.github.com/repos/RareIridium77/Reforger-Base/commits";
-        fetch(`https://corsproxy.io/?url=${encodeURIComponent(url)}`)
-            .then(res => res.json())
-            .then(commits => {
-                const list = document.getElementById("commit-list");
-                commits.slice(0, 10).forEach(commit => {
-                    const msg = commit.commit.message;
-                    const sha = commit.sha.substring(0, 7);
-                    const fullSha = commit.sha;
-                    const author = commit.commit.author.name;
-                    const date = new Date(commit.commit.author.date).toLocaleDateString();
-                    const info = getKeywordInfo(msg);
+        function proxy(url) {
+            return `https://corsproxy.io/?url=${encodeURIComponent(url)}`;
+        }
 
-                    const cleanedMsg = cleanMessage(msg);
+        function setCache(key, data) {
+            localStorage.setItem(key, JSON.stringify({ time: Date.now(), data }));
+        }
 
-                    const item = document.createElement("li");
-                    item.style.marginBottom = "14px";
+        function getCache(key) {
+            const cached = localStorage.getItem(key);
+            if (!cached) return { data: null, expired: false };
 
-                    const labelsHTML = info.map(i =>
-                        `<strong style="color: ${i.color}; margin-right: 6px;">${i.label}</strong>`
-                    ).join("");
+            try {
+                const parsed = JSON.parse(cached);
+                const expired = Date.now() - parsed.time > CACHE_TTL;
+                return { data: parsed.data, expired };
+            } catch {
+                return { data: null, expired: false };
+            }
+        }
 
-                    item.innerHTML = `
-                        ${labelsHTML} – ${cleanedMsg}<br>
-                        <small style="color: #aaa;">
-                            ${author} • ${date} • 
-                            <a href="https://github.com/RareIridium77/Reforger-Base/commit/${fullSha}" 
-                            target="_blank" style="color: #888;"><code>${sha}</code></a>
-                        </small>
-                    `;
-                    list.appendChild(item);
-                });
-            })
-            .catch(err => {
-                document.getElementById("commit-list").innerHTML =
-                    `<li style="color: #f88;">Failed to load commits 😓</li>`;
-                console.error("GitHub API error:", err);
+        const repoSelect = document.getElementById("repo-select");
+        const commitList = document.getElementById("commit-list");
+
+        function renderCommits(commits, repo) {
+            commitList.innerHTML = "";
+            commits.slice(0, 10).forEach(commit => {
+                const msg = commit.commit.message;
+                const sha = commit.sha.substring(0, 7);
+                const fullSha = commit.sha;
+                const author = commit.commit.author.name;
+                const date = new Date(commit.commit.author.date).toLocaleDateString();
+                const info = getKeywordInfo(msg);
+                const cleanedMsg = cleanMessage(msg);
+
+                const item = document.createElement("li");
+                item.style.marginBottom = "14px";
+
+                const labelsHTML = info.map(tag => `
+                    <span class="commit-tag" style="color: ${tag.color};">
+                        ${tag.label}
+                    </span>
+                `).join(", ");
+
+                item.innerHTML = `
+                ${labelsHTML} – ${cleanedMsg}<br>
+                <small style="color: #aaa;">
+                    ${author} • ${date} • 
+                    <a href="https://github.com/${GITHUB_USER}/${repo}/commit/${fullSha}" 
+                    target="_blank" style="color: #888;"><code>${sha}</code></a>
+                </small>
+            `;
+                commitList.appendChild(item);
             });
+        }
+
+        function loadCommits(repo) {
+            commitList.innerHTML = "<li>Loading commits...</li>";
+
+            const cacheKey = `commits:${repo}`;
+            const cache = getCache(cacheKey);
+
+            if (cache.data) {
+                renderCommits(cache.data, repo);
+            }
+
+            if (!cache.data || cache.expired) {
+                fetch(proxy(`https://api.github.com/repos/${GITHUB_USER}/${repo}/commits`))
+                    .then(res => res.json())
+                    .then(commits => {
+                        renderCommits(commits, repo);
+                        setCache(cacheKey, commits);
+                    })
+                    .catch(() => {
+                        if (!cache.data) {
+                            commitList.innerHTML = `<li style="color: #f88;">Failed to load commits 😓</li>`;
+                        }
+                    });
+            }
+        }
+
+        function loadRepos() {
+            const cacheKey = `repos:${GITHUB_USER}`;
+            const cache = getCache(cacheKey);
+
+            if (cache.data) {
+                populateRepos(cache.data);
+            }
+
+            if (!cache.data || cache.expired) {
+                fetch(proxy(`https://api.github.com/users/${GITHUB_USER}/repos`))
+                    .then(res => res.json())
+                    .then(repos => {
+                        populateRepos(repos);
+                        setCache(cacheKey, repos);
+                    })
+                    .catch(err => {
+                        if (!cache.data) {
+                            repoSelect.innerHTML = `<option disabled>Failed to load repos</option>`;
+                        }
+                        console.error("Repo list error:", err);
+                    });
+            }
+        }
+
+        function populateRepos(repos) {
+            repoSelect.innerHTML = "";
+            repos.forEach(repo => {
+                const opt = document.createElement("option");
+                opt.value = repo.name;
+                opt.textContent = repo.name;
+                repoSelect.appendChild(opt);
+            });
+
+            const defaultRepo = "Reforger-Base";
+            if ([...repoSelect.options].some(o => o.value === defaultRepo)) {
+                repoSelect.value = defaultRepo;
+                loadCommits(defaultRepo);
+            }
+
+            repoSelect.addEventListener("change", () => {
+                loadCommits(repoSelect.value);
+            });
+        }
+
+        loadRepos();
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const year = new Date().getFullYear();
