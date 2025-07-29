@@ -279,7 +279,7 @@
             .then(res => res.json())
             .then(commits => {
                 const list = document.getElementById("commit-list");
-                commits.slice(0, 5).forEach(commit => {
+                commits.slice(0, 10).forEach(commit => {
                     const msg = commit.commit.message;
                     const sha = commit.sha.substring(0, 7);
                     const fullSha = commit.sha;
