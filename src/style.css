@@ -13,6 +13,9 @@
      --button-primary: #a33333;
      --button-primary-hovered: #1b1a57;
 
+     --wip-color: #ca395d;
+     --mjr-color: #ec20ff;
+     --sml-color: #bbfc67;
      --fix-color: #d829cf;
      --upd-color: #46cc1e;
      --imp-color: #dbac13;
@@ -20,6 +23,8 @@
      --ref-color: #19c096;
      --mrg-color: #99f066;
      --chg-color: #e77b33;
+     --angry-color: #e733d8;
+     --del-color: #e73933;
  }
 
  h1,
