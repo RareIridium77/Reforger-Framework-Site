@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Reforger Framework</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.3" />
     <style>
         body {
             margin: 0;
@@ -99,6 +99,7 @@
             transition: all 0.3s ease;
             min-width: 220px;
             text-align: center;
+            cursor: pointer;
         }
 
         .button:hover {
@@ -176,7 +177,11 @@
         }
 
         #comit-list {
-            list-style: none; padding: 0; max-width: 800px; margin: auto; text-align: left;
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: auto;
+            text-align: left;
         }
 
         #commit-list li {
@@ -213,8 +218,16 @@
     <div class="button-group">
         <a class="button" href="https://discord.gg/PUEQ75xMd2" target="_blank"><span class="ico"><img
                     src="./src/discord.png" alt=""></span> Join Discord</a>
-        <a class="button hidephone" href="steam://connect/147.185.221.16:52346"><span class="ico"><img
-                    src="./src/steam.png" alt=""></span> Join GMod Server</a>
+        <button class="button hidephone" id="copy-connect">
+            <span class="ico"><img src="./src/steam.png" alt=""></span>
+            Join GMod Server
+        </button>
+    </div>
+
+    <div class="description" id="copied-msg" style="display: none; opacity: 0;">
+        Command copied!<br>
+        Now open GMod, press <strong>~</strong> (tilde) to open the console, and paste:
+        <pre style="margin-top: 10px; color: #aaf;">connect 147.185.221.16:52346</pre>
     </div>
 
     <div id="commits" class="description">
@@ -230,6 +243,28 @@
 
         <p>Made with ❤️ by RareIridium77. <span id="year"></span></p>
     </footer>
+    <script>
+        document.getElementById("copy-connect").addEventListener("click", () => {
+            const command = "connect 147.185.221.16:52346";
+
+            navigator.clipboard.writeText(command).then(() => {
+                const msg = document.getElementById("copied-msg");
+                msg.style.display = "block";
+                msg.style.transition = "opacity 0.3s ease";
+
+                setTimeout(() => {
+                    const go = confirm("Command copied!\nDo you want to try launching Garry's Mod now?");
+                    if (go) {
+                        window.location.href = "steam://run/4000";
+                    }
+                }, 2000)
+            }).catch(err => {
+                alert("Failed to copy connect command 😢");
+                console.error(err);
+            });
+        });
+    </script>
+
     <script>
         const keywords = {
             fix: { label: "Fix", color: "var(--fix-color)" },
@@ -266,7 +301,7 @@
 
         function cleanMessage(raw) {
             const firstLine = raw.split("\n").find(line => line.trim()) || "No message";
-            
+
             if (/^[a-z+]+:/i.test(firstLine)) {
                 return firstLine.replace(/^[^:]+:\s*/i, "");
             }
@@ -286,7 +321,7 @@
                     const author = commit.commit.author.name;
                     const date = new Date(commit.commit.author.date).toLocaleDateString();
                     const info = getKeywordInfo(msg);
-                    
+
                     const cleanedMsg = cleanMessage(msg);
 
                     const item = document.createElement("li");
