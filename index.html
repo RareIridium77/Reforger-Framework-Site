@@ -274,7 +274,8 @@
             return firstLine;
         }
 
-        fetch("https://cors-anywhere.herokuapp.com/https://api.github.com/repos/RareIridium77/Reforger-Base/commits")
+        const url = "https://api.github.com/repos/RareIridium77/Reforger-Base/commits";
+        fetch(`https://corsproxy.io/?url=${encodeURIComponent(url)}`)
             .then(res => res.json())
             .then(commits => {
                 const list = document.getElementById("commit-list");
