@@ -1,0 +1,57 @@
+
+@media (max-width: 600px) {
+    .hidephone {
+        display: none !important;
+    }
+
+    .hidedesktop {
+        display: block;
+    }
+
+    .button.hidedesktop {
+        display: inline-flex;
+    }
+
+    .button:not(.button-group .button).hidedesktop {
+        display: block !important;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .description h2 {
+        margin: 5px 0;
+    }
+
+    .description {
+        font-size: 1em;
+        text-align: left;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .button {
+        width: 50%;
+
+        min-width: unset;
+        font-size: 1em;
+        border-radius: 5px;
+    }
+
+    .button-group {
+        width: 100%;
+        margin: 0 auto;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .discord_members {
+        gap: 1px
+    }
+
+    .discord_member {
+        border-radius: 5px;
+    }
+}
