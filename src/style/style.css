@@ -1,3 +1,7 @@
+* {
+    user-select: none;
+}
+
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
@@ -9,45 +13,6 @@ body {
     align-items: center;
     padding: 50px 20px;
     overflow-x: hidden;
-
-    --button-primary: #a33333;
-    --button-primary-hovered: #1b1a57;
-
-    --wip-color: #ca395d;
-    --mjr-color: #ec20ff;
-    --sml-color: #bbfc67;
-    --fix-color: #d829cf;
-    --upd-color: #46cc1e;
-    --imp-color: #dbac13;
-    --add-color: #1783b4;
-    --ref-color: #19c096;
-    --mrg-color: #99f066;
-    --chg-color: #e77b33;
-    --angry-color: #e733d8;
-    --del-color: #e73933;
-
-    /* Discord Stuff */
-    --discord-lamp: rgb(79, 247, 79);
-    --discord-member-back: rgba(36, 34, 41, 0.493);
-    --discord-member-avatar-back: rgb(22, 21, 24);
-
-    --discord-btn: rgb(36, 34, 41);
-    --discord-btn-text: rgb(235, 235, 235);
-
-    --discord-bot-flag: rgb(58, 108, 184);
-}
-
-.hidedesktop {
-    display: none !important;
-}
-
-h1,
-.subtitle,
-.description,
-.button-group {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 1s ease forwards;
 }
 
 h1 {
@@ -87,69 +52,11 @@ h1 {
     text-decoration: underline;
 }
 
-.button-group {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-    animation-delay: 0.8s;
-}
-
-.button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background-color: var(--button-primary);
-    color: white;
-    font-size: 1.1em;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 12px;
-    text-decoration: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    min-width: 220px;
-    text-align: center;
-    cursor: pointer;
-}
-
-.button:hover {
-    background-color: var(--button-primary-hovered);
-    transform: scale(1.05);
-}
-
-.button .ico img {
-    width: 24px;
-    height: 24px;
-    display: block;
-}
-
-.button:not(.button-group .button) {
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 footer {
     font-size: 0.8em;
     color: #999;
     margin-top: 80px;
     text-align: center;
-    opacity: 0;
-    animation: fadeInUp 1s ease forwards;
     animation-delay: 1s;
 }
 
@@ -164,168 +71,93 @@ footer a:hover {
     text-decoration: underline;
 }
 
-#comit-list {
-    list-style: none;
-    padding: 0;
-    max-width: 800px;
-    margin: auto;
-    text-align: left;
+/* Due closure */
+.description.thanksfor {
+    background: none;
+    border: 2px solid #4ea0ff;
+    padding: 20px;
+    text-align: center;
+    color: #cce4ff;
+    animation-delay: 0.5s;
 }
 
-#commit-list li {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
+.description.thanksfor h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #4ea0ff;
 }
 
-select {
-    background-color: #1b1b1b;
-    color: #fff;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 10px 15px;
-    font-size: 16px;
-    appearance: none;
-    /* убирает стрелочку на некоторых браузерах */
-    -webkit-appearance: none;
-    -moz-appearance: none;
+.description.thanksfor p {
+    margin: 5px 0;
+    font-size: 1.05em;
 }
 
-.select-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-.select-wrapper::after {
-    content: "+";
+/* :D */
+.bullet-hole {
     position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    color: #888;
     pointer-events: none;
-}
 
-/* Discord */
-.discord {
-    display: none;
-}
-
-.discord.loaded {
-    display: block;
-    margin-top: 20px;
-}
-
-.discord_main {
-    margin: 5px 0 10px 0;
-    text-align: left;
-}
-
-.discord #server_name {
-    font-size: 1.3em;
-    font-weight: bold;
-    margin: 0;
-    display: inline-block;
-}
-
-.discord .discord_lamp {
-    margin-left: 1.15vh;
-    font-size: 1.2em;
-    color: var(--discord-lamp);
-    animation: blink 1.5s infinite;
-}
-
-.discord #members_count {
-    display: inline-block;
-    font-size: 0.9em;
-    color: #aaa;
-    margin-left: 10px;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-}
-
-/* Members block */
-.discord_members {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-
-    margin-top: 15px;
-    padding: 5px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-
-    max-height: 500px;
-}
-
-.discord_member {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-
-    padding: 10px;
-    border-radius: 12px;
-    background-color: var(--discord-member-back);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.discord_member_info {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    gap: 10px;
-}
-
-.discord_avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    object-fit: contain;
-    padding: 2px;
-    background-color: var(--discord-member-avatar-back);
+
+    background: radial-gradient(circle at center, #222 30%, #000 80%);
+    box-shadow:
+        0 0 2px 1px rgba(0,0,0,0.8) inset,   /* внутренняя тень */
+        0 0 6px 2px rgba(0,0,0,0.6),          /* внешняя тень */
+        0 0 12px 4px rgba(0,0,0,0.3);         /* лёгкий ореол */
+
+    transform: translate(-50%, -50%) rotate(0deg);
+    animation: recoil 0.15s ease-out;
+    overflow: hidden; /* чтобы псевдоэлемент не вылезал */
 }
 
-.discord_member_name {
-    font-size: 0.95em;
-    font-weight: 500;
-    color: #fff;
-    word-break: keep-all;
+.bullet-hole::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #ffea00 0%, #ff7b00 40%, rgba(0,0,0,0.9) 100%);
+    animation: burn 1.2s forwards ease-out;
 }
 
-.discord_member #isBot {
-    background-color: var(--discord-bot-flag);
-    border-radius: 5px;
-    padding: 2px 5px;
-    margin-left: 5px;
-
-    font-size: 0.8em;
+@keyframes recoil {
+    0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+    60%  { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
-/* Activity */
-.discord_activity {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-
-    font-size: 0.8em;
-    color: #ccc;
-    gap: 0.2vh;
-
-    position: sticky;
+@keyframes burn {
+    0% {
+        opacity: 1;
+        background: radial-gradient(circle, #ffea00 0%, #ff7b00 40%, rgba(0,0,0,0.6) 100%);
+    }
+    60% {
+        opacity: 0.9;
+        background: radial-gradient(circle, #ffb300 0%, #663300 60%, rgba(0,0,0,0.8) 100%);
+    }
+    100% {
+        opacity: 0.7;
+        background: radial-gradient(circle, #000 0%, #000 100%);
+    }
 }
 
-.discord_status::before {
-    content: "Status: ";
-    color: #888;
-    font-weight: normal;
+/* :D */
+
+@keyframes shake {
+    0%   { transform: rotate(0deg); }
+    20%  { transform: rotate(-1deg); }
+    40%  { transform: rotate(1deg); }
+    60%  { transform: rotate(0deg); }
+    80%  { transform: rotate(1deg); }
+    100% { transform: rotate(0deg); }
 }
 
-.discord_game::before {
-    content: "Playing: ";
-    color: #888;
-    font-weight: normal;
+.shake-on-hit {
+    animation: shake 0.3s ease;
 }
